@@ -1,0 +1,12 @@
+bar:
+  monitor: *primary
+  <<: *bar_base
+
+  left:
+    - river: {<<: *river}
+
+  right:
+    - battery:  {<<: *battery}
+    - cpu:      {<<: *cpu}
+    - mem:      {<<: *mem} 
+    - clock:    {<<: *clock}

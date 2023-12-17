@@ -1,0 +1,101 @@
+#!/bin/bash
+
+MOD="Mod4"
+
+ACCENT=6dcae8
+BASE=2b2d3a
+
+riverctl map normal $MOD                    Return spawn "foot"
+
+riverctl map normal $MOD                    Q close
+riverctl map normal $MOD+Control            Q exit
+
+riverctl map normal $MOD                    D spawn "fuzzel"
+
+riverctl map normal $MOD                    W spawn "firefox"
+
+
+# movement and resizing
+riverctl map normal $MOD                    J focus-view next
+riverctl map normal $MOD                    K focus-view previous
+
+riverctl map normal $MOD+Shift              J swap next
+riverctl map normal $MOD+Shift              K swap previous
+
+riverctl map normal $MOD                    H send-layout-cmd rivertile "main-ratio -0.05"
+riverctl map normal $MOD                    L send-layout-cmd rivertile "main-ratio +0.05"
+riverctl map normal $MOD+Shift              H send-layout-cmd rivertile "main-count +1"
+riverctl map normal $MOD+Shift              L send-layout-cmd rivertile "main-count -1"
+
+riverctl map normal $MOD+Alt                H move left 100
+riverctl map normal $MOD+Alt                J move down 100
+riverctl map normal $MOD+Alt                K move up 100
+riverctl map normal $MOD+Alt                L move right 100
+
+riverctl map normal $MOD+Alt+Control        H snap left
+riverctl map normal $MOD+Alt+Control        J snap down
+riverctl map normal $MOD+Alt+Control        K snap up
+riverctl map normal $MOD+Alt+Control        L snap right
+
+riverctl map normal $MOD+Alt+Shift          H resize horizontal -100
+riverctl map normal $MOD+Alt+Shift          J resize vertical 100
+riverctl map normal $MOD+Alt+Shift          K resize vertical -100
+riverctl map normal $MOD+Alt+Shift          L resize horizontal 100
+
+riverctl map normal Super Period focus-output next
+riverctl map normal Super Comma focus-output previous
+
+riverctl map normal Super+Shift Period send-to-output next
+riverctl map normal Super+Shift Comma send-to-output previous
+
+
+# device controls
+riverctl map normal $MOD                    S spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%"
+riverctl map normal $MOD                    X spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%"
+
+
+# rice
+riverctl border-color-unfocused "0x${BASE}"
+riverctl border-color-focused   "0x${ACCENT}"
+
+
+# tags
+for i in $(seq 1 9)
+do
+    TAGS=$((1 << ($i -1)))
+
+    riverctl map normal $MOD                $i set-focused-tags $TAGS
+    riverctl map normal $MOD+Shift          $i set-view-tags $TAGS
+    riverctl map normal $MOD+Control        $i toggle-focused-tags $TAGS
+    riverctl map normal $MOD+Shift+Control  $i toggle-view-tags $TAGS
+done
+
+ALL_TAGS=$(((1 << 32) - 1))
+riverctl map normal $MOD                    0 set-focused-tags $ALL_TAGS
+riverctl map normal $MOD+Shift              0 set-view-tags $ALL_TAGS
+
+
+# tiling
+riverctl map normal $MOD                    Space toggle-float
+riverctl map normal $MOD                    F toggle-fullscreen
+
+# riverctl map normal $MOD+Shift              Space spawn "makoctl dismiss"
+
+riverctl map normal $MOD                    P spawn "grim - | wl-copy"
+riverctl map normal $MOD+Shift              P spawn "GRIM_DEFAULT_DIR=/home/xelphif/pictures/ grim"
+riverctl map normal $MOD+Control            P spawn 'GRIM_DEFAULT_DIR=/home/xelphif/pictures/ grim -g "$(slurp)"'
+
+
+# interop
+# riverctl spawn "dbus-update-activation-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river"
+
+
+# autostart
+riverctl spawn "pipewire"
+riverctl spawn "$HOME/.config/yambar/yambar.sh"
+riverctl spawn "mako"
+
+
+# start
+riverctl default-layout rivertile
+exec rivertile
