@@ -50,8 +50,19 @@ riverctl map normal Super+Shift Comma send-to-output previous
 
 
 # device controls
+riverctl map normal $MOD                    A spawn "brightnessctl set +10%"
+riverctl map normal $MOD                    Z spawn "brightnessctl set 10%-"
+
 riverctl map normal $MOD                    S spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%"
 riverctl map normal $MOD                    X spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%"
+
+
+# input
+TOUCHPAD=pointer-1739-52710-DLL0945:00_06CB:CDE6_Touchpad
+riverctl input $TOUCHPAD tap enabled
+riverctl input $TOUCHPAD natural-scroll enabled
+riverctl input $TOUCHPAD middle-emulation enabled
+riverctl input $TOUCHPAD disable-while-typing enabled
 
 
 # rice
@@ -92,8 +103,10 @@ riverctl map normal $MOD+Control            P spawn 'GRIM_DEFAULT_DIR=/home/xelp
 
 # autostart
 riverctl spawn "pipewire"
+# riverctl spawn "kanshi"
 riverctl spawn "$HOME/.config/yambar/yambar.sh"
 riverctl spawn "mako"
+riverctl spawn "swaybg -m fill -i /home/xelphif/pictures/wp/graph-blue.png"
 
 
 # start

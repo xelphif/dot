@@ -1,3 +1,8 @@
+monitors:
+  - &primary    "eDP-1"
+
+
+
 style:
   fonts:
     - &default_font Hack Nerd Font:pixelsize=12
@@ -123,4 +128,15 @@ modules:
               <<: *string_base
           - string:
               text: "{time}"
+              <<: *string_base
+
+    - &battery
+        name: BAT0
+        poll-interval: 2500
+        content:
+          - string:
+              text: "BATT"
+              <<: *label_base
+          - string:
+              text: "{capacity}%"
               <<: *string_base
